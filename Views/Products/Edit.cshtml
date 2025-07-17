@@ -1,0 +1,90 @@
+﻿@model SportProductMVC.Models.Product
+
+<h2 class="mb-4 text-primary">🛠 Chỉnh sửa sản phẩm</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="border p-4 rounded shadow-sm bg-white">
+    <input type="hidden" asp-for="ProductId" />
+
+    <div class="mb-3">
+        <label asp-for="NamePro" class="form-label"></label>
+        <input asp-for="NamePro" class="form-control" />
+        <span asp-validation-for="NamePro" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DecriptionPro" class="form-label"></label>
+        <textarea asp-for="DecriptionPro" class="form-control"></textarea>
+        <span asp-validation-for="DecriptionPro" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Danh mục</label>
+        @await Component.InvokeAsync("CategorySelector", new { selectedCategory = Model.Category })
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ManufacturingDate" class="form-label"></label>
+        <input asp-for="ManufacturingDate" type="date" class="form-control" />
+        <span asp-validation-for="ManufacturingDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ảnh sản phẩm mới</label>
+        <input type="file" name="ProductImage" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Xem trước ảnh mới</label><br />
+        <img id="previewImage" style="max-width:250px;" class="img-thumbnail" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ImagePro))
+    {
+        <div class="mb-3">
+            <label class="form-label">Ảnh hiện tại:</label><br />
+            <img src="@Model.ImagePro" alt="Ảnh sản phẩm" style="max-width:250px;" class="img-thumbnail" />
+        </div>
+    }
+
+    <button type="submit" class="btn btn-success">💾 Lưu sản phẩm</button>
+</form>
+
+@section Scripts {
+    <script>
+        document.querySelector('input[name="ProductImage"]').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (event) {
+                    document.getElementById('previewImage').src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        const priceInput = document.querySelector('input[name="Price"]');
+
+        priceInput.addEventListener('input', function () {
+            // 🧹 Loại bỏ ký tự không hợp lệ (chỉ cho số, dấu phẩy và chấm)
+            let cleaned = this.value.replace(/[^\d.,]/g, '');
+
+            // 🔄 Chuyển dấu phẩy đầu tiên thành chấm nếu có
+            if (cleaned.includes(',')) {
+                cleaned = cleaned.replace(',', '.');
+            }
+
+            this.value = cleaned;
+        });
+
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

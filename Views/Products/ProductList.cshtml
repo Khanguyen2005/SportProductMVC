@@ -1,0 +1,37 @@
+﻿@model IEnumerable<SportProductMVC.Models.Product>
+
+<h2 class="mb-4 text-primary">📦 Danh sách sản phẩm</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-light">
+        <tr>
+            <th>Ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Danh mục</th>
+            <th>Giá</th>
+            <th>Ngày sản xuất</th>
+            <th class="text-center">Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.ImagePro))
+                    {
+                        <img src="@item.ImagePro" style="max-width:100px;" class="img-thumbnail" />
+                    }
+                </td>
+                <td>@item.NamePro</td>
+                <td>@item.Category</td>
+                <td>@item.Price?.ToString("N0") ₫</td>
+                <td>@item.ManufacturingDate.ToString("dd/MM/yyyy")</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@item.ProductId" class="btn btn-sm btn-warning me-1">Sửa</a>
+                    <a asp-action="Details" asp-route-id="@item.ProductId" class="btn btn-sm btn-info">Chi tiết</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

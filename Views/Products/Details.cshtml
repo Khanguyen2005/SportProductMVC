@@ -1,0 +1,10 @@
+﻿@model SportProductMVC.Models.Product
+<h2>Chi tiết sản phẩm</h2>
+<div>
+    <strong>@Model.NamePro</strong><br />
+    <img src="@Model.ImagePro" width="200" /><br />
+    <p>@Model.DecriptionPro</p>
+    <p>Giá: @Model.Price đ</p>
+    <p>Loại: @Model.Category</p>
+    <p>Ngày sản xuất: @Model.ManufacturingDate.ToShortDateString()</p>
+</div>
